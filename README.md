@@ -40,6 +40,19 @@ run it on release or deploy versions (using the disabeld configuration option).
 
 ### Configuration
 
+In addition to the configuration specified below, the formatter is only ran when passed to rspec
+via a `--formatter` argument (which can be in the `.rspec` file):
+
+```
+rspec spec --format TestrailRspecFormatter::Formatter
+```
+
+To have it ran in addition to the default progress (dots) formatter, execute:
+
+```
+rspec spec --format progress --format TestrailRspecFormatter::Formatter
+```
+
 Configure it via `ENV` variables or `RSpec.configure` (or with a mix of them).
 
 ### Via ENV
