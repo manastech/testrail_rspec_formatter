@@ -1,8 +1,6 @@
 # TestrailRspecFormatter
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/testrail_rspec_formatter`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+An RSpec formatter that sends results to [TestRail](http://www.gurock.com/testrail/)
 
 ## Installation
 
@@ -22,7 +20,49 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+After specs run the formatter will mark test cases of a test run as either passed, failed or retest,
+depending on whether a spec passed, failed or is pending. Specs are associated with TestRail test cases
+by adding a tag with the name `testrail` to them:
+
+```ruby
+describe "som test" do
+  id "some spec", testrail: 1234 do # 1234 is the id of a test case
+    # ...
+  end
+end
+```
+
+The formatter must be configured with a run name inside a project id. If a run with that name doesn't exist
+it is created.
+
+The recommended way to use this formatter is to set the run name to a project's version or tag, and only
+run it on release or deploy versions (using the disabeld configuration option).
+
+### Configuration
+
+Configure it via `ENV` variables or `RSpec.configure` (or with a mix of them).
+
+### Via ENV
+
+* TESTRAIL_FORMATTER_PROJECT_ID: (required) the id of the TestRail project
+* TESTRAIL_FORMATTER_RUN_NAME: (required) the name of the run to target
+* TESTRAIL_FORMATTER_URL: (required) the URL to target (`"https://your-user.testrail.com"``)
+* TESTRAIL_FORMATTER_USER: (required) your TestRail user
+* TESTRAIL_FORMATTER_PASSWORD: (required) your TestRail password (not recommended) or API key (recommended)
+* TESTRAIL_FORMATTER_DISABLED: (optional) set to 1 to disable the formatter
+
+### Via `RSpec.configure`
+
+```ruby
+RSpec.configure do |config|
+  config.testrail_formatter_options[:project_id] = ... # (required) the id of the TestRail project
+  config.testrail_formatter_options[:run_name]   = ... # (required) the name of the run to target
+  config.testrail_formatter_options[:url]        = ... # (required) the URL to target (`"https://your-user.testrail.com"``)
+  config.testrail_formatter_options[:user]       = ... # (required) your TestRail user
+  config.testrail_formatter_options[:password]   = ... # (required) your TestRail password (not recommended) or API key (recommended)
+  config.testrail_formatter_options[:disabled]   = ... # (optional) set to true to disable the formatter
+end
+```
 
 ## Development
 
@@ -32,10 +72,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/testrail_rspec_formatter.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/manastech/testrail_rspec_formatter.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
