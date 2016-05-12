@@ -14,6 +14,7 @@ require 'json'
 
 module TestrailRspecFormatter
   class APIClient
+    attr_accessor :base_url
     attr_accessor :user
     attr_accessor :password
 
@@ -21,6 +22,7 @@ module TestrailRspecFormatter
       if !base_url.match(/\/$/)
         base_url += '/'
       end
+      @base_url = base_url
       @url = base_url + 'index.php?/api/v2/'
     end
 
@@ -35,7 +37,7 @@ module TestrailRspecFormatter
     # uri                 The API method to call including parameters
     #                     (e.g. get_case/1)
     #
-    def send_get(uri)
+    def get(uri)
       _send_request('GET', uri, nil)
     end
 
@@ -52,7 +54,7 @@ module TestrailRspecFormatter
     # data                The data to submit as part of the request (as
     #                     Ruby hash, strings must be UTF-8 encoded)
     #
-    def send_post(uri, data)
+    def post(uri, data)
       _send_request('POST', uri, data)
     end
 
@@ -87,8 +89,9 @@ module TestrailRspecFormatter
         else
           error = 'No additional error message received'
         end
-        raise APIError.new('TestRail API returned HTTP %s (%s)' %
-          [response.code, error])
+        ex = APIError.new('TestRail API returned HTTP %s (%s)' % [response.code, error])
+        ex.code = response.code.to_i
+        raise
       end
 
       result
@@ -96,5 +99,6 @@ module TestrailRspecFormatter
   end
 
   class APIError < StandardError
+    attr_accessor :code
   end
 end
