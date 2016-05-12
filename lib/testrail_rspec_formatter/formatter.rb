@@ -28,8 +28,6 @@ module TestrailRspecFormatter
       examples = notification.examples
       results = []
       examples.each do |example|
-        next if example.pending?
-
         testrail_metadata = example.metadata[:testrail]
         next unless testrail_metadata
 
@@ -105,8 +103,10 @@ module TestrailRspecFormatter
     end
 
     def testrail_status(example)
-      case example.execution_result.status
-      when :passed
+      case
+      when example.pending?
+        RETEST
+      when example.execution_result.status == :passed
         PASSED
       else
         FAILED
