@@ -36,7 +36,7 @@ The formatter must be configured with a run name inside a project id. If a run w
 it is created.
 
 The recommended way to use this formatter is to set the run name to a project's version or tag, and only
-run it on release or deploy versions (using the disabeld configuration option).
+run it on release or deploy versions (using the disabled configuration option).
 
 ### Configuration
 
