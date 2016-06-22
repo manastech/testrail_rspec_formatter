@@ -25,7 +25,7 @@ depending on whether a spec passed, failed or is pending. Specs are associated w
 by adding a tag with the name `testrail` to them:
 
 ```ruby
-describe "som test" do
+describe "some test" do
   id "some spec", testrail: 1234 do # 1234 is the id of a test case
     # ...
   end
